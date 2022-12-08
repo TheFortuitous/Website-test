@@ -1,0 +1,105 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Page Title</title>
+
+</head>
+
+<style>
+body {background-color: gray;}
+
+
+
+</style>
+
+
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>My First Bootstrap Page</h1>
+                <p>This is some text.</p>
+                
+                <input type="userInput" id="userInput" name="userInput" placeholder="Enter API token here">
+                <button type="button" id="fetch" name="fetch">Fetch</button>
+                <button type="button" id="clear" name="clear">Clear</button>
+                <button type="button" id="copy" name="copy">Copy</button>
+                <button type="button" id="download" name="download">Download</button>
+                <div id="result"></div>
+
+          </div>
+    </div>
+
+</body>
+
+<script>
+
+// make new button and add to document
+const button = document.createElement('button');
+button.innerText = 'Fetch';
+button.onclick = function() {
+
+    // get the token from the input field
+    const token = document.getElementById("userInput").value;
+    // get the url from the input field
+    const url = 'https://api.linode.com/v4/linode/instances';
+    // fetch the api data from the url
+    fetch(url, {
+        method: 'GET',
+        headers: {
+        authorization: `Bearer ${token}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // output the data to the html page
+        document.getElementById("result").innerHTML = JSON.stringify(data);
+    }
+    )
+    .catch(error => {
+        // output the error to the html page
+        document.getElementById("result").innerHTML = JSON.stringify(error);
+    }
+    );
+
+}
+document.body.appendChild(button);
+
+// create a function to clear the input field
+function clearInput() {
+    // clear the input field
+    document.getElementById("token").value = "";
+    document.getElementById("url").value = "";
+    document.getElementById("result").innerHTML = "";
+}
+
+// create a function to copy the data from the html page
+function copyData() {
+    // copy the data from the html page
+    const copyText = document.getElementById("result");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+}
+
+// create a function to download the data from the html page
+
+function downloadData() {
+    // download the data from the html page
+    const data = document.getElementById("result").innerText;
+    const blob = new Blob([data], {type: "text/plain"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement
+    ("a");
+    a.href
+    = url;
+    a.download
+    = "data.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+</script>
+</html>
